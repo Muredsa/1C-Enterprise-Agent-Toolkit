@@ -1,7 +1,11 @@
-# Security policy
+# Политика безопасности
 
-Do not report real infobase paths, credentials, configuration sources, customer data, `.cf`, `.cfe`, or `1Cv8.1CD` files in a public issue.
+**Русский** · [English](SECURITY.en.md)
 
-For a vulnerability, contact the repository maintainer privately after the project is published. Until a private contact is configured, prepare a minimal reproduction using a synthetic disposable infobase and do not publish exploitable details.
+Не публикуйте в Issue реальные пути к базе, учётные данные, исходники клиентской конфигурации, клиентские данные, `.cf`, `.cfe` или `1Cv8.1CD`.
 
-The project is designed for isolated copies. Treat `--allow-live-base` and `--allow-existing` as high-risk overrides requiring an explicit human decision.
+Сообщайте об уязвимости через [Private vulnerability reporting](https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/security/advisories/new). Подготовьте минимальное воспроизведение на синтетической одноразовой базе и не раскрывайте эксплуатируемые детали публично до исправления.
+
+Проект рассчитан на изолированные копии. Считайте `--allow-live-base` и `--allow-existing` высокорисковыми исключениями, которые требуют явного решения человека.
+
+Поддерживается текущая стабильная версия. Исправления безопасности выпускаются отдельным patch-релизом.

@@ -1,76 +1,78 @@
-# 1C:Enterprise Agent Toolkit
+<p align="center">
+  <img src="assets/logo.svg" width="96" alt="1C:Enterprise Agent Toolkit logo">
+</p>
 
-[Русский](README.md) | **English**
+<h1 align="center">1C:Enterprise Agent Toolkit</h1>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/actions/workflows/ci.yml)
+<p align="center">
+  Safe Agent Skills for precise 1C:Enterprise configuration and extension development
+</p>
 
-A portable Agent Skills project for precise 1C:Enterprise configuration inspection and configuration-extension development. It exports only explicitly selected metadata, keeps extension work out of the main configuration, validates Designer logs as well as exit codes, and removes session-owned working data when finished.
+<p align="center">
+  <a href="README.md">Русский</a> · <strong>English</strong>
+</p>
 
-## What is included
+<p align="center">
+  <a href="https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/actions/workflows/ci.yml"><img src="https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/releases/latest"><img src="https://img.shields.io/github/v/release/Muredsa/1C-Enterprise-Agent-Toolkit?display_name=tag&sort=semver" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white" alt="Python 3.10+">
+</p>
 
-- `onec-dev` — safety and workflow router.
-- `onec-selective-export` — minimal `/DumpConfigToFiles -listFile` exports.
-- `onec-extension-lifecycle` — create, dump, load, back up, roll back, and delete one extension.
-- `onec-extension-validate` — syntax, full, applicability, update, and `.cfe` verification gates.
-- `scripts/onec.py` — dependency-free Python wrapper around 1C Designer batch mode.
-- Codex and Claude Code plugin manifests.
+![1C:Enterprise Agent Toolkit](assets/social-preview.png)
 
-The skills use the open Agent Skills directory convention (`skills/<name>/SKILL.md`). The repository also follows the official Claude plugin layout demonstrated by Anthropic's [example plugin](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/example-plugin).
+A toolkit for AI agents working with **1C:Enterprise**, BSL, configurations, configuration extensions, and UNF. It exports only explicitly selected metadata, isolates extension work from the source infobase, validates Designer batch results, and removes session-owned temporary data after the task.
 
-## Safety model
-
-File infobases are copied to a disposable `onec-dev-*` session by default. Every command writes logs, `/DumpResult`, backups, and artifacts under that marked session. Cleanup validates the marker, directory name, and absence of symbolic links before deleting only that session.
-
-Passwords are read from an environment variable and never stored in the manifest. Existing extensions are backed up in editable and database forms before replacement. The CLI has no command for erasing infobase data or deleting all extensions.
-
-Read [the safety contract](skills/onec-dev/references/safety-contract.md) before using a live infobase.
-
-## Requirements
-
-- Python 3.10 or newer; no third-party Python packages.
-- A locally installed 1C:Enterprise platform with Designer batch mode.
-- Access to the target infobase.
-
-An agent running in the cloud still needs a runner on the machine that can access 1C and the infobase. The skill format is portable; the 1C runtime is not bundled.
-
-## Install
-
-Clone or download the repository. Do not run unreviewed forks against a production infobase.
-
-### Codex
+## Install in 60 seconds
 
 ```powershell
+git clone https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit.git
+cd 1C-Enterprise-Agent-Toolkit
 py install.py --agent codex
 ```
 
-On Linux or macOS, use `python3 install.py --agent codex`. Restart Codex after installation, then invoke `$onec-dev`.
+Restart Codex and invoke `$onec-dev`. For Claude Code, use `python3 install.py --agent claude`; for another agent, use `python3 install.py --target /path/to/agent/skills`.
 
-The project also contains `.codex-plugin/plugin.json` for plugin packaging and local development.
+> [!IMPORTANT]
+> The 1C platform and infobase are not bundled. Test the first run on a disposable copy.
 
-### Claude Code
+## Included skills
 
-Run directly from a checkout:
+| Skill | Purpose |
+| --- | --- |
+| `onec-dev` | Selects a safe workflow and controls mutation boundaries |
+| `onec-selective-export` | Exports only required objects through `/DumpConfigToFiles -listFile` |
+| `onec-extension-lifecycle` | Creates, dumps, loads, backs up, rolls back, and deletes one extension |
+| `onec-extension-validate` | Checks BSL, configuration integrity, applicability, database update, and final `.cfe` |
 
-```bash
-claude --plugin-dir /absolute/path/to/onec-dev-toolkit
+The shared `scripts/onec.py` CLI uses only the Python standard library. The `skills/<name>/SKILL.md` layout is portable across agents.
+
+## Safe lifecycle
+
+```mermaid
+flowchart LR
+    A["Source file infobase"] -->|"copy"| B["Isolated onec-dev-* session"]
+    B --> C["Selective object export"]
+    C --> D["Create or modify extension"]
+    D --> E["Validate and verify export"]
+    E --> F["Remove session-owned data"]
+    A -. "unchanged" .-> F
 ```
 
-Or install the individual skills and shared CLI:
+Core guarantees:
 
-```bash
-python3 install.py --agent claude
-```
+- a file infobase is copied into a marked disposable session by default;
+- all logs, `/DumpResult` files, exports, and backups remain inside that session;
+- cleanup rejects drive roots, home/current directories, invalid markers, and links;
+- passwords are read only through a named environment variable;
+- an existing extension is backed up in editable and database formats;
+- success requires a zero process code, zero `/DumpResult`, and no error diagnostics in the log.
 
-### Other agents
+Read the complete [safety contract](skills/onec-dev/references/safety-contract.md).
 
-Install into any Agent Skills directory:
-
-```bash
-python3 install.py --target /path/to/agent/skills
-```
-
-The installer copies the shared CLI to the per-user application-data directory documented in the safety contract. It refuses to overwrite an existing skill unless `--upgrade` is supplied.
+<p align="center">
+  <img src="assets/demo.gif" alt="Safe workflow demonstration" width="900">
+</p>
 
 ## First safe run
 
@@ -80,32 +82,44 @@ Discover the platform:
 py scripts/onec.py discover
 ```
 
-Create a sandbox session for a file infobase:
+Create an isolated session:
 
 ```powershell
 py scripts/onec.py session-create `
   --base-file "C:\path\to\base" `
-  --user "Администратор"
+  --user "Administrator"
 ```
 
-Use the returned manifest path:
+Use the `session` path returned in JSON:
 
 ```powershell
 py scripts/onec.py selective-export `
   --session "C:\path\to\onec-dev-...\manifest.json" `
-  --object "Catalog.Номенклатура"
+  --object "Catalog.Products"
 ```
 
-Always finish:
+Clean up when finished:
 
 ```powershell
 py scripts/onec.py session-cleanup `
   --session "C:\path\to\onec-dev-...\manifest.json"
 ```
 
-Run `py scripts/onec.py <command> --help` for all command options.
+See the complete [`examples/safe-unf-inspection`](examples/safe-unf-inspection/README.en.md) workflow. Run `py scripts/onec.py <command> --help` for every option.
 
-When scaffolding an extension, the CLI selectively exports `Configuration` and its exact default `Language.*`. It creates a mapped adopted language with a distinct extension UUID instead of assuming every configuration is Russian or reusing a conflicting internal identifier.
+A live file infobase requires both `--no-sandbox --allow-live-base`; a server or connection-string target requires `--allow-live-base`. Use these modes only after an explicit user decision.
+
+## Compatibility
+
+| Environment | Integration | Status |
+| --- | --- | --- |
+| Codex | `install.py --agent codex` and `.codex-plugin/plugin.json` | Supported |
+| Claude Code | `install.py --agent claude` and `.claude-plugin/plugin.json` | Supported |
+| Other Agent Skills clients | `install.py --target …` | Portable installation |
+| 1C:Enterprise | Designer batch mode | Tested with `8.5.1.1343` |
+| Configurations | UNF and other configurations | UNF tested; validate others on a copy first |
+
+Selective export requires a platform version that supports `-listFile`. When scaffolding an extension, the CLI detects the configuration's default language instead of assuming Russian.
 
 ## Validate the project
 
@@ -113,14 +127,17 @@ When scaffolding an extension, the CLI selectively exports `Configuration` and i
 python3 -m unittest discover -s tests -v
 ```
 
-The CI suite checks Python behavior, manifests, Agent Skill frontmatter, and cleanup guards. Local 1C integration tests are documented in [tests/INTEGRATION.md](tests/INTEGRATION.md); the completed UNF run is recorded in [tests/INTEGRATION-2026-08-11.md](tests/INTEGRATION-2026-08-11.md). CI runners do not include a licensed 1C platform or infobase.
+CI checks the Python code, manifests, skill frontmatter, and cleanup boundaries. The local integration procedure is in [tests/INTEGRATION.md](tests/INTEGRATION.md); the completed UNF run is recorded in [tests/INTEGRATION-2026-08-11.md](tests/INTEGRATION-2026-08-11.md).
 
-## Scope and status
+## Roadmap
 
-Version `0.1.0` targets Designer command-line workflows tested with 1C:Enterprise `8.5.1.1343`. Selective dump behavior depends on a platform version that supports `-listFile`. Test on a disposable copy before adopting another platform or configuration version.
+- more verified examples for common configurations;
+- stable releases with compatibility notes;
+- broader automated checks without weakening the safety contract;
+- agent-directory packages after the formats stabilize.
 
-1C and 1C:Enterprise are trademarks of their respective owner. This community project is not affiliated with or endorsed by 1C Company.
+## Contributing
 
-## License
+Report bugs and ideas through [Issues](https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/issues). Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before opening a Pull Request.
 
-[MIT](LICENSE)
+Released under the [MIT License](LICENSE). 1C and 1C:Enterprise are trademarks of their respective owner. This independent community project is not affiliated with or endorsed by 1C Company.

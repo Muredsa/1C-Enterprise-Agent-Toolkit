@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">1C:Enterprise Agent Toolkit</title>
+  <desc id="desc">An original abstract mark combining selective metadata nodes, an agent core, and an isolated extension.</desc>
+  <defs>
+    <linearGradient id="bg" x1="10" y1="8" x2="86" y2="88" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#182334"/>
+      <stop offset="1" stop-color="#08111e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="25" y1="27" x2="74" y2="71" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffbd4a"/>
+      <stop offset="1" stop-color="#ef3f5b"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="90" height="90" rx="24" fill="url(#bg)" stroke="#31445e" stroke-width="3"/>
+  <path d="M22 27h13M22 48h13M22 69h13" stroke="#ffbd4a" stroke-width="6" stroke-linecap="round"/>
+  <path d="M35 27l12 13M35 48h12M35 69l12-13" stroke="#6e819c" stroke-width="4" stroke-linecap="round"/>
+  <path d="M47 36l15-9 15 9v24l-15 9-15-9z" fill="url(#accent)"/>
+  <path d="M62 27v42M47 36l15 9 15-9" fill="none" stroke="#fff2d0" stroke-opacity=".72" stroke-width="2.5"/>
+  <path d="M56 48h12M62 42v12" stroke="#111b28" stroke-width="4" stroke-linecap="round"/>
+</svg>

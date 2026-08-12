@@ -1,0 +1,69 @@
+name: Ошибка / Bug report
+description: Сообщить о воспроизводимой ошибке без передачи базы или секретов / Report a reproducible problem without sharing an infobase or secrets
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо за сообщение. Не прикладывайте `1Cv8.1CD`, клиентские конфигурации, пароли, `.cf`, `.cfe` или необезличенные логи.
+        Thank you. Do not attach `1Cv8.1CD`, customer configurations, passwords, `.cf`, `.cfe`, or unsanitized logs.
+  - type: input
+    id: toolkit-version
+    attributes:
+      label: Версия Toolkit / Toolkit version
+      placeholder: v0.1.0 or commit SHA
+    validations:
+      required: true
+  - type: input
+    id: platform-version
+    attributes:
+      label: Версия платформы 1С / 1C platform version
+      placeholder: 8.5.1.1343
+    validations:
+      required: true
+  - type: input
+    id: configuration
+    attributes:
+      label: Конфигурация / Configuration
+      placeholder: УНФ 3.x / UNF 3.x
+    validations:
+      required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: Тип базы / Infobase type
+      options:
+        - Изолированная файловая копия / Isolated file copy
+        - Живая файловая база / Live file infobase
+        - Серверная база / Server infobase
+        - Строка соединения / Connection string
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Команда без секретов / Sanitized command
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемый результат / Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Фактический результат / Actual result
+      description: Удалите пути, имена клиентов, пользователей и другие конфиденциальные данные. / Remove paths, customer names, users, and other sensitive data.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Безопасность / Safety
+      options:
+        - label: Я проверил, что описание и логи не содержат базы, пароли, токены или клиентские данные. / I verified that the report contains no infobase, password, token, or customer data.
+          required: true

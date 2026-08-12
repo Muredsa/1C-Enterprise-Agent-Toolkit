@@ -1,0 +1,29 @@
+name: Идея / Feature request
+description: Предложить безопасное улучшение / Suggest a safe improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Какую задачу нужно решить? / What problem should be solved?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Предлагаемый сценарий / Proposed workflow
+    validations:
+      required: true
+  - type: input
+    id: compatibility
+    attributes:
+      label: Платформа и конфигурация / Platform and configuration
+      placeholder: 8.5.x, УНФ / UNF
+  - type: textarea
+    id: safety
+    attributes:
+      label: Риски, откат и очистка / Risks, rollback, and cleanup
+      description: Опишите, какие данные могут измениться и как действие безопасно отменить. / Explain what can change and how it can be safely rolled back.
+    validations:
+      required: true

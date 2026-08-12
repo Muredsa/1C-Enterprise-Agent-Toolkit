@@ -1,12 +1,15 @@
-# Contributing
+# Участие в разработке
 
-Keep each skill narrow, deterministic, and safe for an unattended agent.
+**Русский** · [English](CONTRIBUTING.en.md)
 
-1. Open an issue describing the 1C platform version and exact Designer behavior.
-2. Add or update a unit test for wrapper logic.
-3. Test integration only on a disposable file-infobase copy.
-4. Never add credentials, customer configurations, infobases, `.cf`, or `.cfe` artifacts to the repository.
-5. Preserve the two-field `name` and `description` frontmatter in every `SKILL.md`.
-6. Run `python3 -m unittest discover -s tests -v` before submitting a change.
+Каждый скилл должен оставаться узким, детерминированным и безопасным для автономного агента.
 
-Changes that add mutating Designer commands must document the rollback path and cleanup boundary. Commands that erase data, remove configuration support, mutate the main configuration during extension work, or delete all extensions are out of scope.
+1. Создайте Issue и укажите версию платформы 1С и точное поведение Конфигуратора.
+2. Добавьте или обновите модульный тест для логики обёртки.
+3. Выполняйте интеграционную проверку только на одноразовой копии файловой базы.
+4. Никогда не добавляйте пароли, клиентские конфигурации, базы, `.cf`, `.cfe` или `1Cv8.1CD`.
+5. Сохраняйте только поля `name` и `description` во frontmatter каждого `SKILL.md`.
+6. Обновляйте русскую и английскую документацию вместе.
+7. Выполните `python3 -m unittest discover -s tests -v` перед отправкой изменений.
+
+Изменяющие команды должны документировать резервную копию, откат и границу очистки. Очистка данных базы, снятие конфигурации с поддержки, изменение основной конфигурации при разработке расширения и массовое удаление расширений находятся вне области проекта.
