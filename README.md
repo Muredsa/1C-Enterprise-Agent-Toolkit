@@ -1,42 +1,44 @@
 # 1C:Enterprise Agent Toolkit
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+**Русский** | [English](README.en.md)
+
+[![Лицензия MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/actions/workflows/ci.yml)
 
-[Русская версия](README.ru.md)
+Переносимый проект Agent Skills для точной работы с конфигурациями и расширениями 1С. Он выгружает только явно нужные объекты, не меняет основную конфигурацию при разработке расширения, проверяет не только код завершения, но и `/DumpResult` с логом 1С, а после работы удаляет созданные им временные данные.
 
-A portable Agent Skills project for precise 1C:Enterprise configuration inspection and configuration-extension development. It exports only explicitly selected metadata, keeps extension work out of the main configuration, validates Designer logs as well as exit codes, and removes session-owned working data when finished.
+## Состав
 
-## What is included
+- `onec-dev` — маршрутизатор и единый контракт безопасности.
+- `onec-selective-export` — выборочная выгрузка через `/DumpConfigToFiles -listFile`.
+- `onec-extension-lifecycle` — создание, выгрузка, загрузка, резервирование, откат и удаление одного расширения.
+- `onec-extension-validate` — проверка модулей, полная проверка, применимость, обновление БД и контрольная выгрузка `.cfe`.
+- `scripts/onec.py` — общий CLI на стандартной библиотеке Python.
+- манифесты плагинов для Codex и Claude Code.
 
-- `onec-dev` — safety and workflow router.
-- `onec-selective-export` — minimal `/DumpConfigToFiles -listFile` exports.
-- `onec-extension-lifecycle` — create, dump, load, back up, roll back, and delete one extension.
-- `onec-extension-validate` — syntax, full, applicability, update, and `.cfe` verification gates.
-- `scripts/onec.py` — dependency-free Python wrapper around 1C Designer batch mode.
-- Codex and Claude Code plugin manifests.
+## Главные гарантии
 
-The skills use the open Agent Skills directory convention (`skills/<name>/SKILL.md`). The repository also follows the official Claude plugin layout demonstrated by Anthropic's [example plugin](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/example-plugin).
+- Файловая база по умолчанию копируется в отдельную сессию `onec-dev-*`; исходный `1Cv8.1CD` не изменяется.
+- Все выгрузки, логи, резервные копии и тестовая база находятся внутри сессии.
+- `session-cleanup` удаляет только сессию с корректным маркером и отказывается работать с корнем диска, домашней/текущей папкой или ссылками.
+- Пароль передаётся только через имя переменной окружения.
+- Перед заменой существующего расширения автоматически создаются `editable`- и `database`-копии.
+- В CLI отсутствуют команды очистки данных базы и удаления всех расширений.
+- Успех признаётся только при нулевом коде процесса, нулевом `/DumpResult` и отсутствии диагностических строк в `/Out`.
 
-## Safety model
+Полный контракт: [safety-contract.md](skills/onec-dev/references/safety-contract.md).
 
-File infobases are copied to a disposable `onec-dev-*` session by default. Every command writes logs, `/DumpResult`, backups, and artifacts under that marked session. Cleanup validates the marker, directory name, and absence of symbolic links before deleting only that session.
+## Требования
 
-Passwords are read from an environment variable and never stored in the manifest. Existing extensions are backed up in editable and database forms before replacement. The CLI has no command for erasing infobase data or deleting all extensions.
+- Python 3.10 или новее; сторонние Python-пакеты не требуются.
+- Локально установленная платформа 1С:Предприятие с пакетным режимом Конфигуратора.
+- Доступ к целевой информационной базе.
 
-Read [the safety contract](skills/onec-dev/references/safety-contract.md) before using a live infobase.
+Облачному агенту всё равно нужен исполнитель на компьютере, где установлена платформа 1С и доступна база. Формат скиллов переносим, но сама платформа 1С в проект не входит.
 
-## Requirements
+## Установка
 
-- Python 3.10 or newer; no third-party Python packages.
-- A locally installed 1C:Enterprise platform with Designer batch mode.
-- Access to the target infobase.
-
-An agent running in the cloud still needs a runner on the machine that can access 1C and the infobase. The skill format is portable; the 1C runtime is not bundled.
-
-## Install
-
-Clone or download the repository. Do not run unreviewed forks against a production infobase.
+Склонируйте или скачайте репозиторий. Не запускайте непроверенные форки на рабочей базе.
 
 ### Codex
 
@@ -44,83 +46,85 @@ Clone or download the repository. Do not run unreviewed forks against a producti
 py install.py --agent codex
 ```
 
-On Linux or macOS, use `python3 install.py --agent codex`. Restart Codex after installation, then invoke `$onec-dev`.
+В Linux или macOS используйте `python3 install.py --agent codex`. После установки перезапустите Codex и вызовите `$onec-dev`.
 
-The project also contains `.codex-plugin/plugin.json` for plugin packaging and local development.
+В проекте также находится `.codex-plugin/plugin.json` для упаковки плагина и локальной разработки.
 
 ### Claude Code
 
-Run directly from a checkout:
+Плагин можно запустить прямо из клона:
 
 ```bash
 claude --plugin-dir /absolute/path/to/onec-dev-toolkit
 ```
 
-Or install the individual skills and shared CLI:
+Либо установить отдельные скиллы и общий CLI:
 
 ```bash
 python3 install.py --agent claude
 ```
 
-### Other agents
+### Другие агенты
 
-Install into any Agent Skills directory:
+Укажите каталог Agent Skills нужного агента:
 
 ```bash
 python3 install.py --target /path/to/agent/skills
 ```
 
-The installer copies the shared CLI to the per-user application-data directory documented in the safety contract. It refuses to overwrite an existing skill unless `--upgrade` is supplied.
+Установщик копирует общий CLI в пользовательский каталог данных, указанный в контракте безопасности. Существующий скилл не перезаписывается без параметра `--upgrade`.
 
-## First safe run
+## Безопасный старт
 
-Discover the platform:
+Найдите установленную платформу:
 
 ```powershell
 py scripts/onec.py discover
 ```
 
-Create a sandbox session for a file infobase:
+Создайте изолированную сессию для файловой базы:
 
 ```powershell
 py scripts/onec.py session-create `
-  --base-file "C:\path\to\base" `
+  --base-file "C:\путь\к\базе" `
   --user "Администратор"
 ```
 
-Use the returned manifest path:
+Возьмите из JSON путь `session` и выполните нужную операцию:
 
 ```powershell
 py scripts/onec.py selective-export `
-  --session "C:\path\to\onec-dev-...\manifest.json" `
+  --session "C:\путь\к\onec-dev-...\manifest.json" `
   --object "Catalog.Номенклатура"
 ```
 
-Always finish:
+После работы обязательно удалите сессию:
 
 ```powershell
 py scripts/onec.py session-cleanup `
-  --session "C:\path\to\onec-dev-...\manifest.json"
+  --session "C:\путь\к\onec-dev-...\manifest.json"
 ```
 
-Run `py scripts/onec.py <command> --help` for all command options.
+Полный список параметров: `py scripts/onec.py <команда> --help`.
 
-When scaffolding an extension, the CLI selectively exports `Configuration` and its exact default `Language.*`. It creates a mapped adopted language with a distinct extension UUID instead of assuming every configuration is Russian or reusing a conflicting internal identifier.
+Живая файловая база требует одновременно `--no-sandbox --allow-live-base`; серверная или заданная строкой подключения — `--allow-live-base`. Используйте это только после явного решения пользователя.
 
-## Validate the project
+При создании расширения CLI сам выборочно выгружает `Configuration` и её точный объект основного языка `Language.*`. Для заимствованного языка создаётся отдельный UUID расширения, поэтому нет конфликта внутренних идентификаторов; предположения о русском языке не делаются.
+
+## Проверка проекта
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-The CI suite checks Python behavior, manifests, Agent Skill frontmatter, and cleanup guards. Local 1C integration tests are documented in [tests/INTEGRATION.md](tests/INTEGRATION.md); the completed UNF run is recorded in [tests/INTEGRATION-2026-08-11.md](tests/INTEGRATION-2026-08-11.md). CI runners do not include a licensed 1C platform or infobase.
+CI проверяет поведение Python-кода, манифесты, frontmatter скиллов и ограничения очистки. Инструкция по локальному интеграционному тесту находится в [tests/INTEGRATION.md](tests/INTEGRATION.md), а результат прогона на УНФ — в [tests/INTEGRATION-2026-08-11.md](tests/INTEGRATION-2026-08-11.md). В GitHub Actions нет лицензированной платформы 1С и информационной базы, поэтому интеграционная проверка выполняется локально.
 
-## Scope and status
+## Область применения и статус
 
-Version `0.1.0` targets Designer command-line workflows tested with 1C:Enterprise `8.5.1.1343`. Selective dump behavior depends on a platform version that supports `-listFile`. Test on a disposable copy before adopting another platform or configuration version.
+Версия `0.1.0` проверена с пакетными командами Конфигуратора 1С:Предприятие `8.5.1.1343` и демонстрационной УНФ. Выборочная выгрузка требует версию платформы с поддержкой `-listFile`. Для другой версии платформы или конфигурации сначала используйте одноразовую копию.
 
-1C and 1C:Enterprise are trademarks of their respective owner. This community project is not affiliated with or endorsed by 1C Company.
+1С и 1С:Предприятие являются товарными знаками соответствующего правообладателя. Это независимый общественный проект, не связанный с фирмой «1С» и не одобренный ею.
 
-## License
+## Лицензия
 
 [MIT](LICENSE)
