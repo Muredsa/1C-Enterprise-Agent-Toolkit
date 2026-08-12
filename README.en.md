@@ -21,7 +21,7 @@
 
 ![1C:Enterprise Agent Toolkit](assets/social-preview.png)
 
-A toolkit for AI agents working with **1C:Enterprise**, BSL, configurations, configuration extensions, and UNF. It exports only explicitly selected metadata, isolates extension work from the source infobase, validates Designer batch results, and removes session-owned temporary data after the task.
+A universal toolkit for AI agents working with **any 1C:Enterprise application configuration**, BSL, and configuration extensions. It is not tied to UNF or another standard configuration: it exports only user-selected metadata, isolates extension work from the source infobase, validates Designer batch results, and removes session-owned temporary data after the task.
 
 ## Install in 60 seconds
 
@@ -105,7 +105,7 @@ py scripts/onec.py session-cleanup `
   --session "C:\path\to\onec-dev-...\manifest.json"
 ```
 
-See the complete [`examples/safe-unf-inspection`](examples/safe-unf-inspection/README.en.md) workflow. Run `py scripts/onec.py <command> --help` for every option.
+See the complete universal [`examples/safe-object-inspection`](examples/safe-object-inspection/README.en.md) workflow. Run `py scripts/onec.py <command> --help` for every option.
 
 A live file infobase requires both `--no-sandbox --allow-live-base`; a server or connection-string target requires `--allow-live-base`. Use these modes only after an explicit user decision.
 
@@ -117,9 +117,9 @@ A live file infobase requires both `--no-sandbox --allow-live-base`; a server or
 | Claude Code | `install.py --agent claude` and `.claude-plugin/plugin.json` | Supported |
 | Other Agent Skills clients | `install.py --target …` | Portable installation |
 | 1C:Enterprise | Designer batch mode | Tested with `8.5.1.1343` |
-| Configurations | UNF and other configurations | UNF tested; validate others on a copy first |
+| Configurations | Any application configuration | No hard-coded objects; integration-tested with UNF |
 
-Selective export requires a platform version that supports `-listFile`. When scaffolding an extension, the CLI detects the configuration's default language instead of assuming Russian.
+Selective export requires a platform version that supports `-listFile`. Object names are always supplied explicitly, so the CLI works the same way with standard, industry-specific, and custom configurations. When scaffolding an extension, it detects the configuration's default language instead of assuming Russian. UNF is only the documented integration-test environment, not a toolkit limitation.
 
 ## Validate the project
 

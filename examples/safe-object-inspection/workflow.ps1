@@ -3,7 +3,9 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$BaseFile,
 
-    [string]$Object = "Catalog.Номенклатура",
+    [Parameter(Mandatory = $true)]
+    [string]$Object,
+
     [string]$User = "Администратор",
     [string]$PythonExe = "python"
 )
