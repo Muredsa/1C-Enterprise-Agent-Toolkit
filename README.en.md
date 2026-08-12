@@ -140,4 +140,8 @@ CI checks the Python code, manifests, skill frontmatter, and cleanup boundaries.
 
 Report bugs and ideas through [Issues](https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit/issues). Read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before opening a Pull Request.
 
+## Support the project
+
+If the toolkit has been useful and saved you time, you can [support its development through CloudTips](https://pay.cloudtips.ru/p/b5302504). Contributions help test new platform versions and develop safe workflows for 1C configurations and extensions.
+
 Released under the [MIT License](LICENSE). 1C and 1C:Enterprise are trademarks of their respective owner. This independent community project is not affiliated with or endorsed by 1C Company.
