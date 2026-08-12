@@ -1,0 +1,4 @@
+interface:
+  display_name: "1C Development Router"
+  short_description: "Route safe 1C development workflows"
+  default_prompt: "Use $onec-dev to plan and execute a safe 1C development workflow."

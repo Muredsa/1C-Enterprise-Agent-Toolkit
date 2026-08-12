@@ -1,0 +1,12 @@
+{
+  "name": "onec-dev-toolkit",
+  "version": "0.1.0",
+  "description": "Safe, selective 1C:Enterprise configuration inspection and extension development workflows.",
+  "author": {
+    "name": "Muresda",
+    "url": "https://github.com/Muredsa"
+  },
+  "homepage": "https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit",
+  "repository": "https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit.git",
+  "license": "MIT"
+}

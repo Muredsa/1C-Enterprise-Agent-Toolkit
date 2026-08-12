@@ -1,0 +1,4 @@
+interface:
+  display_name: "1C Extension Lifecycle"
+  short_description: "Create and modify 1C extensions safely"
+  default_prompt: "Use $onec-extension-lifecycle to create or modify a 1C configuration extension safely."

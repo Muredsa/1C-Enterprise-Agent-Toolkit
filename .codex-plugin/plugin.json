@@ -1,0 +1,28 @@
+{
+  "name": "onec-dev-toolkit",
+  "version": "0.1.0",
+  "description": "Safe, selective 1C:Enterprise configuration inspection and extension development workflows.",
+  "author": {
+    "name": "Muresda",
+    "url": "https://github.com/Muredsa"
+  },
+  "homepage": "https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit",
+  "repository": "https://github.com/Muredsa/1C-Enterprise-Agent-Toolkit.git",
+  "license": "MIT",
+  "keywords": ["1c", "1c-enterprise", "agent-skills", "codex", "claude"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "1C:Enterprise Agent Toolkit",
+    "shortDescription": "Inspect 1C configurations and develop extensions safely.",
+    "longDescription": "Export only required metadata objects, create or modify configuration extensions, validate applicability, and remove isolated work data when finished.",
+    "developerName": "Muresda",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Selective metadata export",
+      "Extension lifecycle",
+      "Extension validation",
+      "Isolated disposable sessions"
+    ],
+    "defaultPrompt": "Use $onec-dev to perform this 1C:Enterprise development task in an isolated session and clean up temporary data afterward."
+  }
+}

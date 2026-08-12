@@ -1,0 +1,4 @@
+interface:
+  display_name: "1C Extension Validation"
+  short_description: "Validate and apply 1C extensions safely"
+  default_prompt: "Use $onec-extension-validate to validate and safely apply this 1C extension."

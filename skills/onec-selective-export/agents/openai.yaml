@@ -1,0 +1,4 @@
+interface:
+  display_name: "1C Selective Export"
+  short_description: "Export only required 1C configuration objects"
+  default_prompt: "Use $onec-selective-export to export only the 1C objects needed for this task."
